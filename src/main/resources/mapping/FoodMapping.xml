@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nanbo.ordersystem.mapper.FoodMapper">
+    <!--<result column="数据库字段名" property="实体类属性" jdbcType="数据库字段类型" />-->
+    <resultMap id="FoodResultMap" type="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">
+        <result column="food_guid" jdbcType="VARCHAR" property="foodGuid" />
+        <result column="food_id" jdbcType="INTEGER" property="foodId" />
+        <result column="food_name" jdbcType="VARCHAR" property="foodName" />
+        <result column="food_type" jdbcType="VARCHAR" property="foodType" />
+        <result column="food_price" jdbcType="DECIMAL" property="foodPrice" />
+        <result column="food_image" jdbcType="VARCHAR" property="foodImage" />
+        <result column="food_content" jdbcType="VARCHAR" property="foodContent" />
+        <result column="food_status" jdbcType="INTEGER" property="foodStatus" />
+
+        <result column="com_simple_name" jdbcType="VARCHAR" property="foodComGuid" />
+
+        <result column="food_upload_date" jdbcType="VARCHAR" property="foodUploadDate" />
+        <result column="food_upload_people" jdbcType="VARCHAR" property="foodUploadPeople" />
+        <result column="food_remarks" jdbcType="VARCHAR" property="foodRemarks" />
+        <result column="food_taste" jdbcType="VARCHAR" property="foodTaste" />
+
+    </resultMap>
+
+
+    <!--获取所有的高校联盟-->
+    <select id="GetAllFood" resultMap="FoodResultMap">
+      select f.food_guid,f.food_id,f.food_name,f.food_type,f.food_price,f.food_image,f.food_content,f.food_status,c.com_simple_name,f.food_upload_date,f.food_upload_people,f.food_remarks,f.food_taste from [food] f join [commerce] c on f.food_com_guid=c.com_guid
+    </select>
+
+    <!--&lt;!&ndash;获取所有的高校联盟&ndash;&gt;-->
+    <!--<select id="GetAllFood" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">-->
+      <!--select * from [food]-->
+    <!--</select>-->
+
+    <!--com_guid,com_id,com_name,com_simple_name,com_people,com_phone,com_remarks from [commerce]-->
+    <!--获取单条菜品信息-->
+    <select id="GetOneFoodInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">
+      select *  from [food] where food_guid=#{foodGuid}
+    </select>
+
+
+    <!--获取单条高校联盟数据-->
+    <!--<select id="GetOneAllianceData" resultType="com.nanbo.ordersystem.entity.Alliance">-->
+    <!--select * from [Alliance] where alliance_id=#{alliance_id}-->
+    <!--</select>-->
+
+    <!--添加菜品-->
+    <insert id="AddFood" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">
+      insert into [food] (food_name,food_type,food_price,food_image,food_content,food_status,food_com_guid,food_upload_date,food_upload_people,food_remarks,food_taste) values (#{foodName},#{foodType},#{foodPrice},#{foodImage},#{foodContent},#{foodStatus},#{foodComGuid},#{foodUploadDate},#{foodUploadPeople},#{foodRemarks},#{foodTaste})
+    </insert>
+
+    <!--更新菜品上下架-->
+    <update id="UpdateFoodStatus">
+       update [food] set food_status=#{foodStatus} where food_guid=#{foodGuid}
+    </update>
+
+
+
+    <!--删除指定轮播图-->
+    <delete id="DeleteFood">
+      delete  from  [food] where food_guid=#{foodGuid}
+    </delete>
+
+    <!--批量删除轮播图-->
+    <delete id="BatchDeleteFood" parameterType="java.util.List">
+        delete from [food] where food_guid in
+        <foreach collection="list" item="item" separator="," open="("  close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <!--更改菜品数据-->
+    <update id="UpdateFoodData">
+        update [food]
+        <set>
+            <if test="foodImage!=null">food_image=#{foodImage},</if>
+            food_com_guid=#{foodComGuid},
+            food_name=#{foodName},
+            food_type=#{foodType},
+            food_price=#{foodPrice},
+            food_content=#{foodContent},
+            food_status=#{foodStatus},
+            food_upload_people=#{foodUploadPeople},
+            food_remarks=#{foodRemarks},
+            food_taste=#{foodTaste},
+        </set>
+        where food_guid=#{foodGuid}
+    </update>
+
+
+
+    <!--&lt;!&ndash;更改高校联盟数据&ndash;&gt;-->
+    <!--<update id="UpdateAllianceData">-->
+    <!--update [Alliance]-->
+    <!--<set>-->
+    <!--<if test="alliance_img!=null">alliance_img=#{alliance_img},</if>-->
+    <!--alliance_name=#{alliance_name},-->
+    <!--alliance_address=#{alliance_address},-->
+    <!--alliance_telephone=#{alliance_telephone}-->
+    <!--</set>-->
+    <!--where alliance_id=#{alliance_id}-->
+    <!--</update>-->
+
+    <!--删除单条商户数据-->
+    <!--<delete id="DeleteOneCommerce">-->
+      <!--delete  from  [commerce] where com_guid=#{comGuid}-->
+    <!--</delete>-->
+
+    <!--&lt;!&ndash;批量删除联盟数据&ndash;&gt;-->
+    <!--<delete id="BatchDeleteAlliance" parameterType="java.util.List">-->
+    <!--delete from [Alliance] where alliance_id in-->
+    <!--<foreach collection="list" item="item" separator="," open="("  close=")">-->
+    <!--#{item}-->
+    <!--</foreach>-->
+    <!--</delete>-->
+
+
+    <!--******************************以下小程序调用*******************************-->
+
+    <!--根据所属商户获取菜品-->
+    <select id="GetAllFoodToSmallRoutine" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">
+        select * from [food] where food_com_guid=#{foodComGuid}
+    </select>
+
+
+
+
+</mapper>

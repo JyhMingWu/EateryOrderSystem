@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="lib/html5shiv.js"></script>
+	<script type="text/javascript" src="lib/respond.min.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+	<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+	<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+	<!--[if IE 6]>
+	<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+	<script>DD_belatedPNG.fix('*');</script>
+	<![endif]-->
+	<title>订单明细</title>
+	<link href="lib/webuploader/0.1.5/webuploader.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		div.panel,p.flip
+		{
+			margin:0px;
+			padding:5px;
+			text-align:center;
+			background:#e5eecc;
+			border:solid 1px #c3c3c3;
+		}
+		div.panel
+		{
+			height:120px;
+			display:none;
+		}
+	</style>
+</head>
+<body>
+<div class="page-container">
+
+	<table class="table table-border table-bordered table-striped" style="width: 90%;margin:auto">
+		<thead>
+		<tr>
+			<th style="width: 120px;text-align: center;">类型</th>
+			<th style="text-align: center;"></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<th style="width: 120px;text-align: center;">订单编号</th>
+			<td id="orderSid">表格内容1</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">所属商户</th>
+			<td id="orderComName">表格内容2</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">标识号(学号)</th>
+			<td id="orderXh">表格内容3</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">下单明细</th>
+			<td id="clickToLook">点击看明细</td>
+		</tr>
+
+			<tr id="detail">
+				<th style="width: 120px;text-align: center;"></th>
+				<td style="padding: 0 0">
+					<table class="table table-border table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="text-align: center;">菜品名称</th>
+								<th style="text-align: center;">单价</th>
+								<th style="text-align: center;">数量</th>
+								<th style="text-align: center;">口味</th>
+							</tr>
+						</thead>
+						<tbody  id="mingxi">
+
+						</tbody>
+					</table>
+				</td>
+			</tr>
+
+		<tr>
+			<th style="width: 120px;text-align: center;">菜品口味</th>
+			<td id="orderFoodTaste">表格内容5</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">总数量</th>
+			<td id="orderSumNumber">表格内容6</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">总金额</th>
+			<td id="orderSumPay">表格内容7</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">留言备注</th>
+			<td id="orderRemarks">表格内容8</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">下单时间</th>
+			<td id="orderStartTime">表格内容9</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">订单完成时间</th>
+			<td id="orderEndTime">表格内容10</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">订单状态</th>
+			<td id="orderStatus">表格内容10</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">支付状态</th>
+			<td id="orderPayStatus">表格内容11</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">支付时间</th>
+			<td id="orderPayTime">表格内容12</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">支付单号(流水号)</th>
+			<td id="orderPayNumber">表格内容13</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">收件人</th>
+			<td id="orderPeople">表格内容14</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">电话</th>
+			<td id="orderPhone">表格内容15</td>
+		</tr>
+		<tr>
+			<th style="width: 120px;text-align: center;">收件地址</th>
+			<td id="orderAddress">表格内容16</td>
+		</tr>
+		</tbody>
+	</table>
+
+
+</div>
+
+<div>
+	<h2>效果演示</h2>
+
+
+
+	<p class="flip" id="123">点击这里，隐藏/显示面板</p>
+	<div class="panel" style="display: block;" id="456"><p>一寸光阴一寸金，因此，我们为您提供快捷易懂的学习内容。</p>
+		<p>在这里，您可以通过一种易懂的便利的模式获得您需要的任何知识。</p></div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="lib/webuploader/0.1.5/webuploader.min.js"></script>
+<script type="text/javascript">
+
+
+
+
+    $(document).ready(function(){
+        $("#123").click(function(){
+            $("#456").slideToggle("slow");
+        });
+
+        $("#clickToLook").click(function(){
+            $("#detail").slideToggle("slow");
+        });
+    });
+    function article_save(){
+        alert("刷新父级的时候会自动关闭弹层。")
+        window.parent.location.reload();
+    }
+
+    $(function(){
+        $.ajax({
+            url: "http://localhost:9417/Order/GetOrderInfo?orderGuid="+getUrlParam("orderGuid"),
+            type: 'GET',
+            // beforeSend: function(request) {
+            //     request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
+            // },
+            success: function (data) {
+                if(data['Status']){
+
+					$("#orderSid").text(data['Data']['orderSid']);
+                    $("#orderComName").text(data['Data']['orderComName']);
+                    $("#orderXh").text(data['Data']['orderXh']);
+
+                    $("#orderSid").text(data['Data']['orderSid']);
+
+                    var htmls="";
+                    for(var i=0;i<data['Data']['listOrderDetail'].length;i++){
+						htmls+='<tr><td>'+data['Data']['listOrderDetail'][i]['orderDFoodName']+'</td><td>'+data['Data']['listOrderDetail'][i]['orderDFoodPrice']+'</td><td>×'+data['Data']['listOrderDetail'][i]['orderDNumber']+'</td><td>'+data['Data']['listOrderDetail'][i]['orderDTaste']+'</td></tr>';
+
+                    }
+                    $("#mingxi").append(htmls);
+
+                    $("#orderFoodTaste").text(data['Data']['orderFoodTaste']);
+                    $("#orderSumNumber").text(data['Data']['orderSumNumber']);
+
+                    $("#orderSumPay").text(data['Data']['orderSumPay']);
+                    $("#orderRemarks").text(data['Data']['orderRemarks']);
+                    $("#orderStartTime").text(data['Data']['orderStartTime']);
+                    $("#orderEndTime").text(data['Data']['orderEndTime']);
+                    if(data['Data']['orderStatus']==1){
+                        $("#orderStatus").text("已完成");
+					}else{
+                        $("#orderStatus").text("未完成");
+					}
+
+                    if(data['Data']['orderPayStatus']==1){
+                        $("#orderPayStatus").text("已支付");
+                    }else{
+                        $("#orderPayStatus").text("未支付");
+                    }
+
+                    $("#orderPayTime").text(data['Data']['orderPayTime']);
+                    $("#orderPayNumber").text(data['Data']['orderPayNumber']);
+                    $("#orderPeople").text(data['Data']['orderPeople']);
+                    $("#orderPhone").text(data['Data']['orderPhone']);
+                    $("#orderAddress").text(data['Data']['orderAddress']);
+
+
+
+                    // layer.msg(data['Message'], {icon:6,time:1500});
+                    // setTimeout(function () {
+                    //     var index = parent.layer.getFrameIndex(window.name);
+                    //     parent.layer.close(index);
+                    // }, 1500);
+                }else{
+                    layer.msg(data['Message'], {icon:5,time:1500});
+                    setTimeout(function () {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }, 1500);
+                }
+            },
+            error: function(xhr, exception){
+                if( xhr.status === 0)
+                    alert('Error : ' + xhr.status + 'You are not connected.');
+                else if( xhr.status == "403"){
+                    layer.alert('在线超时，认证已无效，请重新登录', {
+                        skin: 'layui-layer-lan' //样式类名
+                        ,closeBtn: 0
+                    }, function(){
+                        localStorage.removeItem("user_token");
+                        localStorage.removeItem("real_name");
+                        localStorage.removeItem("user_name");
+                        parent.window.location.href="login.html";
+                    });
+                }
+                else if( xhr.status == "401"){
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    layer.msg(jsonResponse['msg'], {icon:5,time:1500});
+                }
+                else if( xhr.status == "500")
+                    alert('Internal Server Error [500].');
+            }
+        });
+    });
+
+
+
+    // 获取页面传参参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    //更改菜品数据
+    function reviseSubmit () {
+        var formData = new FormData();
+        console.log("输出文件："+$("#files")[0].files[0]);
+        if($("#files")[0].files[0]==null){
+            console.log("输出文件：为空");
+            formData.append("file", "null");
+        }else{
+            console.log("输出文件：不为空");
+            formData.append("file", $("#files")[0].files[0]);
+        }
+
+        formData.append("food_guid", getUrlParam("foodGuid"));
+        formData.append("food_name", $("#food_name").val());
+        formData.append("food_type", $("#food_type").val());
+        formData.append("food_com_guid", $("#food_com_guid").val());
+        formData.append("food_price", $("#food_price").val());
+        formData.append("food_content", $("#food_content").val());
+        formData.append("food_upload_people", $("#food_upload_people").val());
+        formData.append("food_taste", $("#food_taste").val());
+        formData.append("food_remarks", $("#food_remarks").val());
+        formData.append("food_status", $("input[type='checkbox']").is(':checked'));
+
+        $.ajax({
+            url: "http://localhost:9417/OrderManagementSystem/UpdateFoodData",
+            type: 'POST',
+            data:formData,
+            cache: false,
+            async: false,
+            processData : false,  //必须false才会避开jQuery对 formdata 的默认处理
+            contentType : false,  //必须false才会自动加上正确的Content-Type
+            // beforeSend: function(request) {
+            //     request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
+            // },
+            success: function (data) {
+                if(data['Status']){
+                    layer.msg(data['Message'], {icon:6,time:1500});
+                    setTimeout(function () {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.window.location.href="food-list.html";
+                    }, 1500);
+                }else{
+                    layer.msg(data['Message'], {icon:6,time:1500});
+                    setTimeout(function () {
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        parent.window.location.href="food-list.html";
+                    }, 1500);
+                }
+            },
+            error: function(xhr, exception){
+                if( xhr.status === 0)
+                    alert('Error : ' + xhr.status + 'You are not connected.');
+                else if( xhr.status == "403"){
+                    layer.alert('在线超时，认证已无效，请重新登录', {
+                        skin: 'layui-layer-lan' //样式类名
+                        ,closeBtn: 0
+                    }, function(){
+                        localStorage.removeItem("user_token");
+                        localStorage.removeItem("real_name");
+                        localStorage.removeItem("user_name");
+                        parent.window.location.href="login.html";
+                    });
+                }
+                else if( xhr.status == "401"){
+                    var jsonResponse = JSON.parse(xhr.responseText);
+                    layer.msg(jsonResponse['msg'], {icon:5,time:1500});
+                }
+                else if( xhr.status == "500")
+                    alert('Internal Server Error [500].');
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

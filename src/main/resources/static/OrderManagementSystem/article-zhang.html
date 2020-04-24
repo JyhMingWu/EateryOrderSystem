@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+
+    <![endif]-->
+    <title>新闻内容</title>
+</head>
+<body>
+<div id="container" style="width: 50%;height: 100%;margin-left:auto;margin-right:auto;border-style: groove;border-width: 5px; padding:5%;">
+<a onclick="PageCrawler(http://www.gaokao.com/e/20190816/5d5669fa46590_2.shtml)"></a>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/hcharts/Highcharts/5.0.6/js/highcharts.js"></script>
+<script type="text/javascript" src="lib/hcharts/Highcharts/5.0.6/js/modules/exporting.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        if(getUrlParam("new_id")!=null){
+            $.ajax({
+                url: "http://localhost:8080/New/GetSingleNewData?new_id="+getUrlParam("new_id"),
+                type: 'GET',
+                beforeSend: function(request) {
+                    request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
+                },
+                success: function (data) {
+                    if(data['Status']){
+                        // $("#new_title").val(data['Data'][0]['new_title']);
+                        // $("#new_type").val(data['Data'][0]['new_type']);
+                        // $("#new_sort").val(data['Data'][0]['new_sort']);
+                        // $("#new_describe").val(data['Data'][0]['new_describe']);
+                        // $("#new_publish_people").val(data['Data'][0]['new_publish_people']);
+                        // UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+                        // UE.addListener("ready", function () {
+                        // editor准备好之后才可以使用
+                        $("#container").append(data['Data'][0]['new_conten']);
+
+                        // });
+                    }else{
+                        // layer.alert("数据获取失败！", {
+                        //     icon: 5,
+                        //     title: "提示"
+                        // });
+                        alert("数据获取失败");
+                    }
+                },
+                error: function(xhr, exception){
+                    if( xhr.status === 0)
+                        alert('Error : ' + xhr.status + 'You are not connected.');
+                    else if( xhr.status == "403"){
+                        layer.alert('在线超时，认证已无效，请重新登录', {
+                            skin: 'layui-layer-lan' //样式类名
+                            ,closeBtn: 0
+                        }, function(){
+                            localStorage.removeItem("user_token");
+                            localStorage.removeItem("real_name");
+                            localStorage.removeItem("user_name");
+                            parent.window.location.href="login.html";
+                        });
+                    }
+                    else if( xhr.status == "401"){
+                        var jsonResponse = JSON.parse(xhr.responseText);
+                        layer.msg(jsonResponse['msg'], {icon:5,time:1500});
+                    }
+                    else if( xhr.status == "500")
+                        alert('Internal Server Error [500].');
+                }
+            });
+        }else{
+            //页面爬虫
+            PageCrawler(getUrlParam("URank_content"));
+        }
+
+
+    });
+
+    // 获取页面传参参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+    
+    //调用分析爬虫页面
+    function PageCrawler(URank_content) {
+        $.ajax({
+            url: "http://localhost:8080/URank/GetInfoURank?URank_content="+URank_content+"&id="+getUrlParam("id"),
+            type: 'GET',
+            success: function (data) {
+                $("#container").empty();
+                $("#container").append(data);
+            },
+            error: function (data) {
+                alert(data['Message']);
+            }
+        });
+    }
+</script>
+</body>
+</html>

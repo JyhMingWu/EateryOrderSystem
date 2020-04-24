@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--<configuration>-->
+    <!--<settings>-->
+        <!--&lt;!&ndash; 打印查询语句 &ndash;&gt;-->
+        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+    <!--</settings>-->
+    <!--<typeAliases>-->
+        <!--<package name="com.hehe.gogo.pojo"/>-->
+    <!--</typeAliases>-->
+<!--</configuration>-->
+<mapper namespace="com.nanbo.ordersystem.mapper.AllianceMapper">
+
+    <!--<resultMap id="BaseResultMap" type="com.nanbo.ordersystem.entity.User">-->
+    <!--<result column="id" jdbcType="INTEGER" property="id" />-->
+    <!--<result column="name" jdbcType="VARCHAR" property="name" />-->
+    <!--<result column="password" jdbcType="VARCHAR" property="password" />-->
+    <!--</resultMap>-->
+
+    <!--获取所有的高校联盟-->
+    <select id="GetAllAlliance" resultType="com.nanbo.ordersystem.entity.Alliance">
+      select * from [Alliance]
+    </select>
+
+    <!--获取单条高校联盟数据-->
+    <select id="GetOneAllianceData" resultType="com.nanbo.ordersystem.entity.Alliance">
+      select * from [Alliance] where alliance_id=#{alliance_id}
+    </select>
+
+    <insert id="AddAlliance" parameterType="com.nanbo.ordersystem.entity.Alliance">
+    insert into [Alliance] (alliance_name,alliance_address,alliance_telephone,alliance_img) values (#{alliance_name},#{alliance_address},#{alliance_telephone},#{alliance_img})
+    </insert>
+
+    <!--更改高校联盟数据-->
+    <update id="UpdateAllianceData">
+      update [Alliance]
+      <set>
+          <if test="alliance_img!=null">alliance_img=#{alliance_img},</if>
+          alliance_name=#{alliance_name},
+          alliance_address=#{alliance_address},
+          alliance_telephone=#{alliance_telephone}
+      </set>
+        where alliance_id=#{alliance_id}
+    </update>
+
+    <!--删除单条联盟数据-->
+    <delete id="DeleteAlliance">
+      delete  from  [Alliance] where alliance_id=#{alliance_id}
+    </delete>
+
+    <!--批量删除联盟数据-->
+    <delete id="BatchDeleteAlliance" parameterType="java.util.List">
+        delete from [Alliance] where alliance_id in
+        <foreach collection="list" item="item" separator="," open="("  close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+</mapper>

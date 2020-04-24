@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="lib/ueditor/1.4.3/ueditor.config.js"></script>
+    <script type="text/javascript" src="lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" src="lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+
+    <style type="text/css">
+        div{
+            width:100%;
+        }
+    </style>
+    <style type="text/css">
+        div.panel,p.flip
+        {
+            margin:0px;
+            padding:5px;
+            text-align:center;
+            background:#e5eecc;
+            border:solid 1px #c3c3c3;
+        }
+        div.panel
+        {
+            height:120px;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>完整demo</h1>
+    guid：<input type="text" value="2C0258A0EBE1471F83E383B04FD80158" name="uAGuid" id="uAGuid"><br>
+    学号：<input type="text" value="2015131221" name="uAXh" id="uAXh"><br>
+    联系电话：<input type="text" value="15625539629" name="uAPhone" id="uAPhone"><br>
+    联系人：<input type="text" value="吴志明" name="uAPeople" id="uAPeople"><br>
+    地址：<input type="text" value="广东科技学院 南苑 1-814" name="uAAddress" id="uAAddress"><br>
+    <input type="button" value="提交" id="button" onclick="tijiao()">
+
+    <input type="button" value="测试"  onclick="test()">
+</div>
+
+
+<div>
+    <h2>效果演示</h2>
+
+
+
+    <p class="flip">点击这里，隐藏/显示面板</p>
+    <div class="panel" style="display: block;"><p>一寸光阴一寸金，因此，我们为您提供快捷易懂的学习内容。</p>
+        <p>在这里，您可以通过一种易懂的便利的模式获得您需要的任何知识。</p></div>
+</div>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $(".flip").click(function(){
+            $(".panel").slideToggle("slow");
+        });
+    });
+
+    var order_detail = [
+        {"orderDXh":"2015131221","orderDFoodGuid":"0B4460129B3942788EC2D36BC370204E","orderDOrderGuid":"OrderGuid1","orderDFoodName":"菜品4-再次修改名称","orderDFoodPrice":"2.5","orderDNumber":"1","orderDTaste":"微辣","orderDSequence":"1"},
+        {"orderDXh":"2015131221","orderDFoodGuid":"27728FCB49FA499DB4E6D37C9306DC4C","orderDOrderGuid":"OrderGuid2","orderDFoodName":"菜品10-名称","orderDFoodPrice":"3.5","orderDNumber":"2","orderDTaste":"中辣","orderDSequence":"2"},
+        {"orderDXh":"2015131221","orderDFoodGuid":"499C52E35DE84BDF901D0DA82526B1F2","orderDOrderGuid":"OrderGuid3","orderDFoodName":"菜品9-修改名称","orderDFoodPrice":"3.0","orderDNumber":"1","orderDTaste":"特辣","orderDSequence":"3"},
+        ];
+
+    var order = {
+        "order_detail":order_detail,//预约信息
+        "orderComGuid":"446A73E3480E476283CD7BF740EE9CA2",//车辆信息
+        "orderComName":"第一饭堂",//当前登录用户信息
+        "orderXh":"2015131221"
+    };
+
+function tijiao() {
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:9417/UserAddress/UpdateUserAddressInfo',
+        dataType: 'json',
+        data:{
+            uAGuid:$("#uAGuid").val(),
+            uAXh:$("#uAXh").val(),
+            uAPhone:$("#uAPhone").val(),
+            uAPeople:$("#uAPeople").val(),
+            uAAddress:$("#uAAddress").val(),
+            uADefault:true,
+        },
+        // beforeSend: function(request) {
+        //     request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
+        // },
+        success: function(data){
+            if(data['Status']){
+                alert(data['Message'])
+            }else{
+                alert(data['Message'])
+            }
+        }
+    });
+}
+
+function test() {
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:9417/Order/ShoppingCartSettlement',
+        dataType: 'json',
+        // contentType:'application/json;charset=UTF-8',
+        // data:{
+        //     listOrderDetail:JSON.stringify(order_detail),
+        //     orderComGuid:"446A73E3480E476283CD7BF740EE9CA2",//车辆信息
+        //     orderComName:"第一饭堂",//当前登录用户信息
+        //     orderXh:"2015131221"
+        // },
+        // data:{
+        //     listOrderDetail:JSON.stringify(order),
+        // },
+        data:{
+            listOrderDetail:JSON.stringify(order_detail),//预约信息
+            orderComGuid:"446A73E3480E476283CD7BF740EE9CA2",//车辆信息
+            orderComName:"第一饭堂",//当前登录用户信息
+            orderXh:"2015131221"
+        },
+        // beforeSend: function(request) {
+        //     request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
+        // },
+        success: function(data){
+            if(data['Status']){
+                alert("我现在进行下一步插入了");
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:9417/Order/SubmissionOfOrders',
+                    dataType: 'json',
+                    data:{
+                        order:JSON.stringify(data['Data'])
+                    },
+                    success: function(data){
+                        if(data['Status']){
+                            alert(data['Message']);
+
+                        }else{
+                            alert(data['Message'])
+                        }
+                    }
+                });
+            }else{
+                alert(data['Message'])
+            }
+        }
+    });
+}
+</script>
+</body>
+</html>

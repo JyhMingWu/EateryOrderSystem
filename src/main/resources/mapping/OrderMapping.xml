@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nanbo.ordersystem.mapper.OrderMapper">
+
+
+    <!--<result column="数据库字段名" property="实体类属性" jdbcType="数据库字段类型" />-->
+    <resultMap id="OrderResultMap" type="com.nanbo.ordersystem.entity.EateryOrderSystem.Order">
+        <result column="order_guid" jdbcType="VARCHAR" property="orderGuid" />
+        <result column="order_id" jdbcType="INTEGER" property="orderId" />
+        <result column="order_sid" jdbcType="VARCHAR" property="orderSid" />
+        <result column="order_com_guid" jdbcType="VARCHAR" property="orderComGuid" />
+        <result column="order_sum_pay" jdbcType="DECIMAL" property="orderSumPay" />
+        <result column="order_sum_number" jdbcType="VARCHAR" property="orderSumNumber" />
+        <result column="order_start_time" jdbcType="VARCHAR" property="orderStartTime" />
+        <result column="order_end_time" jdbcType="INTEGER" property="orderEndTime" />
+        <result column="order_receive_status" jdbcType="VARCHAR" property="orderReceiveStatus" />
+        <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+        <result column="order_pay_time" jdbcType="VARCHAR" property="orderPayTime" />
+        <result column="order_pay_number" jdbcType="VARCHAR" property="orderPayNumber" />
+        <result column="order_pay_status" jdbcType="VARCHAR" property="orderPayStatus" />
+        <result column="order_remarks" jdbcType="VARCHAR" property="orderRemarks" />
+        <result column="order_people" jdbcType="VARCHAR" property="orderPeople" />
+        <result column="order_phone" jdbcType="VARCHAR" property="orderPhone" />
+        <result column="order_address" jdbcType="VARCHAR" property="orderAddress" />
+        <result column="order_food_taste" jdbcType="VARCHAR" property="orderFoodTaste" />
+        <result column="order_xh" jdbcType="VARCHAR" property="orderXh" />
+        <result column="order_com_name" jdbcType="VARCHAR" property="orderComName" />
+        <collection property="listOrderDetail" resultMap="OrderDetailList"/>
+    </resultMap>
+
+    <resultMap id="OrderDetailList" type="com.nanbo.ordersystem.entity.EateryOrderSystem.OrderDetail">
+        <result column="order_d_guid" jdbcType="VARCHAR" property="orderDGuid" />
+        <result column="order_d_id" jdbcType="INTEGER" property="orderDId" />
+        <result column="order_d_num_id" jdbcType="INTEGER" property="orderDNumId" />
+        <result column="order_d_food_guid" jdbcType="VARCHAR" property="orderDFoodGuid" />
+        <result column="order_d_order_sid" jdbcType="VARCHAR" property="orderDOrderSid" />
+        <result column="order_d_food_name" jdbcType="VARCHAR" property="orderDFoodName" />
+        <result column="order_d_food_price" jdbcType="DECIMAL" property="orderDFoodPrice" />
+        <result column="order_d_sequence" jdbcType="INTEGER" property="orderDSequence" />
+        <result column="order_d_number" jdbcType="INTEGER" property="orderDNumber" />
+        <result column="order_d_taste" jdbcType="VARCHAR" property="orderDTaste" />
+    </resultMap>
+
+    <!--后台查找订单管理-->
+    <select id="GetAllOrderInPayStatus" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Order">
+        select * from [Order] where order_pay_status=#{orderPayStatus}
+    </select>
+
+    <!--根据orderGuid查找订单详细数据-->
+    <select id="GetOrderInfo" resultMap="OrderResultMap">
+        select o.order_guid,o.order_id,o.order_sid,o.order_com_guid,o.order_sum_pay,o.order_sum_number,o.order_start_time,o.order_end_time,o.order_receive_status,o.order_status,o.order_pay_time,o.order_pay_number,o.order_pay_status,o.order_remarks,o.order_people,o.order_phone,o.order_address,o.order_food_taste,o.order_xh,o.order_com_name,list.order_d_guid,list.order_d_id,list.order_d_num_id,list.order_d_food_guid,list.order_d_order_sid,list.order_d_food_name,list.order_d_food_price,list.order_d_sequence,list.order_d_number,list.order_d_taste from [Order] o join [order_detail] list on o.order_sid=list.order_d_order_sid where order_guid=#{orderGuid}
+    </select>
+
+    <!--删除订单（后台删除订单/用户取消订单）-->
+    <delete id="DeleteOrder" >
+      delete from [order] where order_guid=#{orderGuid}
+    </delete>
+
+    <!--删除订单明细的数据（后台删除订单/用户取消订单）-->
+    <delete id="DeleteOrderDetail">
+        delete from [order_detail] where order_d_order_sid =#{orderDOrderSid}
+    </delete>
+
+
+
+
+
+
+
+
+    <!--******************************以下小程序调用*******************************-->
+
+    <!--批量插入订单明细-->
+    <insert id="AddOrderDetails" parameterType="java.util.List">
+        insert into [order_detail] (order_d_num_id,order_d_food_guid,order_d_order_sid,order_d_food_name,order_d_food_price,order_d_sequence,order_d_number,order_d_taste)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderDNumId},#{item.orderDFoodGuid},#{item.orderDOrderSid},#{item.orderDFoodName},#{item.orderDFoodPrice},#{item.orderDSequence},#{item.orderDNumber},#{item.orderDTaste})
+        </foreach>
+    </insert>
+
+    <!--生成订单-->
+    <insert id="AddOrder" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.Order">
+      insert into [order] (order_sid,order_com_guid,order_sum_pay,order_sum_number,order_start_time,order_end_time,order_receive_status,order_status,order_remarks,order_people,order_phone,order_address,order_food_taste,order_xh,order_com_name,order_pay_status)
+      values (#{orderSid},#{orderComGuid},#{orderSumPay},#{orderSumNumber},#{orderStartTime},#{orderEndTime},#{orderReceiveStatus},#{orderStatus},#{orderRemarks},#{orderPeople},#{orderPhone},#{orderAddress},#{orderFoodTaste},#{orderXh},#{orderComName},#{orderPayStatus})
+    </insert>
+
+    <!--&lt;!&ndash;根据学号获取用户信息地址&ndash;&gt;-->
+    <!--<select id="GetAllUserAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">-->
+        <!--select * from [user_address] where u_a_xh=#{uAXh}-->
+    <!--</select>-->
+
+    <!--根据学号获取用户是否有默认地址信息-->
+    <select id="GetUserDefaultAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">
+        select * from [user_address] where u_a_xh=#{uAXh} and u_a_default=1
+    </select>
+
+    <!--&lt;!&ndash;修改用户信息地址&ndash;&gt;-->
+    <!--<update id="UpdateUserAddressInfo">-->
+        <!--update [user_address] set u_a_xh=#{uAXh},u_a_phone=#{uAPhone},u_a_people=#{uAPeople},u_a_address=#{uAAddress},u_a_default=#{uADefault} where u_a_guid=#{uAGuid}-->
+    <!--</update>-->
+
+    <!--&lt;!&ndash;根据uAGuid删除用户信息地址&ndash;&gt;-->
+    <!--<delete id="DeleteUserAddressInfo" >-->
+      <!--delete from [user_address] where u_a_guid=#{uAGuid}-->
+    <!--</delete>-->
+
+</mapper>

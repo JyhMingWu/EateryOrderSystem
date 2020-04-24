@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nanbo.ordersystem.mapper.UserAddressMapper">
+
+    <!--<resultMap id="BaseResultMap" type="com.nanbo.ordersystem.entity.User">-->
+    <!--<result column="id" jdbcType="INTEGER" property="id" />-->
+    <!--<result column="name" jdbcType="VARCHAR" property="name" />-->
+    <!--<result column="password" jdbcType="VARCHAR" property="password" />-->
+    <!--</resultMap>-->
+
+    <!--&lt;!&ndash;获取所有的高校联盟&ndash;&gt;-->
+    <!--<select id="GetAllFood" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">-->
+      <!--select * from [food]-->
+    <!--</select>-->
+
+    <!--&lt;!&ndash;com_guid,com_id,com_name,com_simple_name,com_people,com_phone,com_remarks from [commerce]&ndash;&gt;-->
+    <!--&lt;!&ndash;获取单条菜品信息&ndash;&gt;-->
+    <!--<select id="GetOneFoodInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Food">-->
+      <!--select *  from [food] where food_guid=#{foodGuid}-->
+    <!--</select>-->
+
+
+    <!--&lt;!&ndash;获取单条高校联盟数据&ndash;&gt;-->
+    <!--&lt;!&ndash;<select id="GetOneAllianceData" resultType="com.nanbo.ordersystem.entity.Alliance">&ndash;&gt;-->
+    <!--&lt;!&ndash;select * from [Alliance] where alliance_id=#{alliance_id}&ndash;&gt;-->
+    <!--&lt;!&ndash;</select>&ndash;&gt;-->
+
+
+    <!--&lt;!&ndash;更新菜品上下架&ndash;&gt;-->
+    <!--<update id="UpdateFoodStatus">-->
+       <!--update [food] set food_status=#{foodStatus} where food_guid=#{foodGuid}-->
+    <!--</update>-->
+
+
+
+    <!--&lt;!&ndash;删除指定轮播图&ndash;&gt;-->
+    <!--<delete id="DeleteFood">-->
+      <!--delete  from  [food] where food_guid=#{foodGuid}-->
+    <!--</delete>-->
+
+    <!--&lt;!&ndash;批量删除轮播图&ndash;&gt;-->
+    <!--<delete id="BatchDeleteFood" parameterType="java.util.List">-->
+        <!--delete from [food] where food_guid in-->
+        <!--<foreach collection="list" item="item" separator="," open="("  close=")">-->
+            <!--#{item}-->
+        <!--</foreach>-->
+    <!--</delete>-->
+
+
+    <!--&lt;!&ndash;更改菜品数据&ndash;&gt;-->
+    <!--<update id="UpdateFoodData">-->
+        <!--update [food]-->
+        <!--<set>-->
+            <!--<if test="foodImage!=null">food_image=#{foodImage},</if>-->
+            <!--food_com_guid=#{foodComGuid},-->
+            <!--food_name=#{foodName},-->
+            <!--food_type=#{foodType},-->
+            <!--food_price=#{foodPrice},-->
+            <!--food_content=#{foodContent},-->
+            <!--food_status=#{foodStatus},-->
+            <!--food_upload_people=#{foodUploadPeople},-->
+            <!--food_remarks=#{foodRemarks},-->
+            <!--food_taste=#{foodTaste},-->
+        <!--</set>-->
+        <!--where food_guid=#{foodGuid}-->
+    <!--</update>-->
+
+
+
+    <!--&lt;!&ndash;&lt;!&ndash;更改高校联盟数据&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<update id="UpdateAllianceData">&ndash;&gt;-->
+    <!--&lt;!&ndash;update [Alliance]&ndash;&gt;-->
+    <!--&lt;!&ndash;<set>&ndash;&gt;-->
+    <!--&lt;!&ndash;<if test="alliance_img!=null">alliance_img=#{alliance_img},</if>&ndash;&gt;-->
+    <!--&lt;!&ndash;alliance_name=#{alliance_name},&ndash;&gt;-->
+    <!--&lt;!&ndash;alliance_address=#{alliance_address},&ndash;&gt;-->
+    <!--&lt;!&ndash;alliance_telephone=#{alliance_telephone}&ndash;&gt;-->
+    <!--&lt;!&ndash;</set>&ndash;&gt;-->
+    <!--&lt;!&ndash;where alliance_id=#{alliance_id}&ndash;&gt;-->
+    <!--&lt;!&ndash;</update>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;删除单条商户数据&ndash;&gt;-->
+    <!--&lt;!&ndash;<delete id="DeleteOneCommerce">&ndash;&gt;-->
+    <!--&lt;!&ndash;delete  from  [commerce] where com_guid=#{comGuid}&ndash;&gt;-->
+    <!--&lt;!&ndash;</delete>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash;批量删除联盟数据&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<delete id="BatchDeleteAlliance" parameterType="java.util.List">&ndash;&gt;-->
+    <!--&lt;!&ndash;delete from [Alliance] where alliance_id in&ndash;&gt;-->
+    <!--&lt;!&ndash;<foreach collection="list" item="item" separator="," open="("  close=")">&ndash;&gt;-->
+    <!--&lt;!&ndash;#{item}&ndash;&gt;-->
+    <!--&lt;!&ndash;</foreach>&ndash;&gt;-->
+    <!--&lt;!&ndash;</delete>&ndash;&gt;-->
+
+
+    <!--******************************以下小程序调用*******************************-->
+
+    <!--把默认地址改成不默认  开始-->
+    <!--根据uAGuid获取单条用户地址信息-->
+    <update id="SetAddressDefaultToFalse">
+       update [user_address] set u_a_default=0 where u_a_guid=#{uAGuid}
+    </update>
+
+    <!--根据学号获取用户是否有默认地址信息-->
+    <select id="GetUserDefaultAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">
+        select * from [user_address] where u_a_xh=#{uAXh} and u_a_default=1
+    </select>
+    <!--把默认地址改成不默认  结束-->
+
+
+    <!--添加地址信息-->
+    <insert id="AddUserAddressInfo" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">
+      insert into [user_address] (u_a_xh,u_a_phone,u_a_people,u_a_address,u_a_default) values (#{uAXh},#{uAPhone},#{uAPeople},#{uAAddress},#{uADefault})
+    </insert>
+
+    <!--根据学号获取用户信息地址-->
+    <select id="GetAllUserAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">
+        select * from [user_address] where u_a_xh=#{uAXh}
+    </select>
+
+    <!--根据uAGuid获取单条用户地址信息-->
+    <select id="GetOneUserAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">
+        select * from [user_address] where u_a_guid=#{uAGuid}
+    </select>
+
+    <!--修改用户信息地址-->
+    <update id="UpdateUserAddressInfo">
+        update [user_address] set u_a_xh=#{uAXh},u_a_phone=#{uAPhone},u_a_people=#{uAPeople},u_a_address=#{uAAddress},u_a_default=#{uADefault} where u_a_guid=#{uAGuid}
+    </update>
+
+    <!--根据uAGuid删除用户信息地址-->
+    <delete id="DeleteUserAddressInfo" >
+      delete from [user_address] where u_a_guid=#{uAGuid}
+    </delete>
+
+</mapper>

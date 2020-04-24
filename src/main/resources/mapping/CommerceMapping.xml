@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nanbo.ordersystem.mapper.CommerceMapper">
+
+    <!--<resultMap id="BaseResultMap" type="com.nanbo.ordersystem.entity.User">-->
+    <!--<result column="id" jdbcType="INTEGER" property="id" />-->
+    <!--<result column="name" jdbcType="VARCHAR" property="name" />-->
+    <!--<result column="password" jdbcType="VARCHAR" property="password" />-->
+    <!--</resultMap>-->
+
+    <!--获取所有的高校联盟-->
+    <select id="GetAllCommerce" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Commerce">
+      select * from [commerce]
+    </select>
+
+    <!--com_guid,com_id,com_name,com_simple_name,com_people,com_phone,com_remarks from [commerce]-->
+    <!--获取单条商户信息-->
+    <select id="GetOneCommerceInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Commerce">
+      select *  from [commerce] where com_guid=#{comGuid}
+    </select>
+
+
+    <!--获取单条高校联盟数据-->
+    <!--<select id="GetOneAllianceData" resultType="com.nanbo.ordersystem.entity.Alliance">-->
+      <!--select * from [Alliance] where alliance_id=#{alliance_id}-->
+    <!--</select>-->
+
+    <!--添加商户-->
+    <insert id="AddCommerce" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.Commerce">
+      insert into [commerce] (com_name,com_simple_name,com_people,com_phone,com_remarks) values (#{comName},#{comSimpleName},#{comPeople},#{comPhone},#{comRemarks})
+    </insert>
+
+    <!--更新商户-->
+    <update id="UpdateCommerceInfo" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.Commerce">
+       update [commerce] set com_name=#{comName},com_simple_name=#{comSimpleName},com_people=#{comPeople},com_phone=#{comPhone},com_remarks=#{comRemarks} where com_guid=#{comGuid}
+    </update>
+
+
+    <!--&lt;!&ndash;更改高校联盟数据&ndash;&gt;-->
+    <!--<update id="UpdateAllianceData">-->
+        <!--update [Alliance]-->
+        <!--<set>-->
+            <!--<if test="alliance_img!=null">alliance_img=#{alliance_img},</if>-->
+            <!--alliance_name=#{alliance_name},-->
+            <!--alliance_address=#{alliance_address},-->
+            <!--alliance_telephone=#{alliance_telephone}-->
+        <!--</set>-->
+        <!--where alliance_id=#{alliance_id}-->
+    <!--</update>-->
+
+    <!--删除单条商户数据-->
+    <delete id="DeleteOneCommerce">
+      delete  from  [commerce] where com_guid=#{comGuid}
+    </delete>
+
+    <!--&lt;!&ndash;批量删除联盟数据&ndash;&gt;-->
+    <!--<delete id="BatchDeleteAlliance" parameterType="java.util.List">-->
+        <!--delete from [Alliance] where alliance_id in-->
+        <!--<foreach collection="list" item="item" separator="," open="("  close=")">-->
+            <!--#{item}-->
+        <!--</foreach>-->
+    <!--</delete>-->
+
+
+
+
+
+
+
+    <!--******************************以下小程序调用*******************************-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
