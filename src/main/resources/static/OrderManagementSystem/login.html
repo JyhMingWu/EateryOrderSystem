@@ -82,8 +82,8 @@ var _hmt = _hmt || [];
 function Login() {
 
     $.ajax({
-        // url : "http://localhost:8080/Alliance/AddAlliance",
-        url : "http://localhost:8080/sys/login",
+        // url : "/Alliance/AddAlliance",
+        url : "/sys/login",
         type : 'POST',
         data : {
             user_name:$("#username").val(),
@@ -120,7 +120,7 @@ function cancel() {
 function Logout() {
     $.ajax({
         // url : "http://localhost:8080/Alliance/AddAlliance",
-        url : "http://localhost:8080/sys/logout",
+        url : "/sys/logout",
         type : 'GET',
         beforeSend: function(request) {
             request.setRequestHeader("Access-Token", token);

@@ -313,7 +313,7 @@
     function Logout() {
         var token = localStorage.getItem("user_token");
         $.ajax({
-            url: "http://localhost:8080/sys/logout",
+            url: "/sys/logout",
             type: 'GET',
             async: false,
             beforeSend: function (request) {

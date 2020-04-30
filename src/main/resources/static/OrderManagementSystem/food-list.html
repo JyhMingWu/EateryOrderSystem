@@ -104,7 +104,7 @@
     var oTable;//定义变量名，用于存放dataTable对象，一般定义为全局的比较好
     $(document).ready(function () {
         // $.ajax({
-        //     url: "http://localhost:9417/Carousel/GetAllCarouselFiles",
+        //     url: "/Carousel/GetAllCarouselFiles",
         //     type: 'GET',
         //     success: function (data) {
         //         var html = "";
@@ -161,7 +161,7 @@
             }
         },
         //
-        "ajax": "http://localhost:9417//Food/GetAllFood",
+        "ajax": "/Food/GetAllFood",
         "columns": [
             { "data": "foodGuid", "render": function(data,type,row,meta){
                     return data = '<tr class="text-c"><td><input name="" type="checkbox" value="'+data+'"></td>';
@@ -262,7 +262,7 @@
     function picture_stop(obj, id) {
         layer.confirm('确认要下架吗？', function (index) {
             $.ajax({
-                url: "http://localhost:9417/Food/UpdateFoodStatus",
+                url: "/Food/UpdateFoodStatus",
                 type: 'GET',
                 data:{
                     foodStatus:0,
@@ -321,7 +321,7 @@
     function picture_start(obj, id) {
         layer.confirm('确认要使用吗？', function (index) {
             $.ajax({
-                url: "http://localhost:9417/Food/UpdateFoodStatus",
+                url: "/Food/UpdateFoodStatus",
                 type: 'GET',
                 data:{
                     foodStatus:1,
@@ -399,7 +399,7 @@
         layer.confirm('确认要删除吗？', function (index) {
             $.ajax({
                 type: 'GET',
-                url: "http://localhost:9417/Food/DeleteFood",
+                url: "/Food/DeleteFood",
                 data:{
                     foodGuid:id,
                 },
@@ -461,7 +461,7 @@
             });
             $.ajax({
                 type: 'GET',
-                url: "http://localhost:9417/Food/BatchDeleteFood",
+                url: "/Food/BatchDeleteFood",
                 data:{
                     cidList:JSON.stringify(checked_array),
                 },

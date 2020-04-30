@@ -105,7 +105,7 @@
             "sSortAscending": ": 以升序排列此列",
             "sSortDescending": ": 以降序排列此列"
         }
-    },"ajax": "http://localhost:9417/Commerce/GetAllCommerce",
+    },"ajax": "/Commerce/GetAllCommerce",
     "columns": [
         // { "data": "comId", "render": function(data,type,row,meta){
         //         return data = '<tr class="text-c"><td><input name="" type="checkbox" value="'+data+'"></td>';
@@ -190,7 +190,7 @@ function commerce_del(obj,id){
 	layer.confirm('确认要删除吗？',function(index){
         $.ajax({
             type: 'GET',
-            url: "http://localhost:9417/Commerce/DeleteOneCommerce",
+            url: "/Commerce/DeleteOneCommerce",
             data:{
                 comGuid:id,
             },
@@ -247,7 +247,7 @@ function datadel() {
         });
         $.ajax({
             type: 'GET',
-            url: "http://localhost:9417/New/BatchDeleteNew",
+            url: "/New/BatchDeleteNew",
             data:{
                 nidList:JSON.stringify(checked_array),
             },
@@ -327,7 +327,7 @@ function article_stop(obj,id,status){
 	    // if(status==1){
 	        //审核是通过的，允许修改
             $.ajax({
-                url: "http://localhost:9417/New/UpdateNewPublishStatus",
+                url: "/New/UpdateNewPublishStatus",
                 type: 'GET',
                 data:{
                     new_id:id,
@@ -396,7 +396,7 @@ function article_start(obj,id,status){
         if(status==1){
             //审核是通过的，允许修改
             $.ajax({
-                url: "http://localhost:9417/New/UpdateNewPublishStatus",
+                url: "/New/UpdateNewPublishStatus",
                 type: 'GET',
                 data:{
                     new_id:id,
@@ -472,7 +472,7 @@ function Select() {
 
     $.ajax({
         // url : "http://localhost:9417/Alliance/AddAlliance",
-        url : "http://localhost:9417/New/ConditionalSelect?startTime="+logmin+"&endTime="+logmax,
+        url : "/New/ConditionalSelect?startTime="+logmin+"&endTime="+logmax,
         type : 'GET',
         data : {
             user_name:$("#username").val(),
@@ -488,7 +488,7 @@ function Select() {
                         {"orderable":false,"aTargets":[0,9]}// 不参与排序的列
                     ],
                     "retrieve":true,
-                    "ajax": "http://localhost:9417/New/ConditionalSelect?startTime="+logmin+"&endTime="+logmax,
+                    "ajax": "/New/ConditionalSelect?startTime="+logmin+"&endTime="+logmax,
                     "columns": [
                         { "data": "new_id", "render": function(data,type,row,meta){
                                 return data = '<tr class="text-c"><td><input name="" type="checkbox" value="'+data+'"></td>';
@@ -617,7 +617,7 @@ function examine(id) {
 
 function SubmitExamine(id,new_auditing_status,text) {
     $.ajax({
-        url: "http://localhost:9417/New/ExamineNewStatus",
+        url: "/New/ExamineNewStatus",
         type: 'GET',
         data:{
             new_id:id,

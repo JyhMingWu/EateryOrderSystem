@@ -174,7 +174,7 @@
 
         $.ajax({
             type: 'GET',
-            url: "http://localhost:9417/Commerce/GetOneCommerceInfo?comGuid="+comGuid,
+            url: "/Commerce/GetOneCommerceInfo?comGuid="+comGuid,
             dataType: 'json',
             // beforeSend: function(request) {
             //     request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
@@ -252,7 +252,7 @@
             var comRemarks=$("#comRemarks").val();
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:9417/Commerce/UpdateCommerceInfo",
+                url: "/Commerce/UpdateCommerceInfo",
                 data: {
                     comGuid:comGuid,
                     comName: comName,

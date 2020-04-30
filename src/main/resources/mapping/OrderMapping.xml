@@ -86,24 +86,32 @@
       values (#{orderSid},#{orderComGuid},#{orderSumPay},#{orderSumNumber},#{orderStartTime},#{orderEndTime},#{orderReceiveStatus},#{orderStatus},#{orderRemarks},#{orderPeople},#{orderPhone},#{orderAddress},#{orderFoodTaste},#{orderXh},#{orderComName},#{orderPayStatus})
     </insert>
 
-    <!--&lt;!&ndash;根据学号获取用户信息地址&ndash;&gt;-->
-    <!--<select id="GetAllUserAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">-->
-        <!--select * from [user_address] where u_a_xh=#{uAXh}-->
-    <!--</select>-->
 
     <!--根据学号获取用户是否有默认地址信息-->
     <select id="GetUserDefaultAddressInfo" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.UserAddress">
         select * from [user_address] where u_a_xh=#{uAXh} and u_a_default=1
     </select>
 
-    <!--&lt;!&ndash;修改用户信息地址&ndash;&gt;-->
-    <!--<update id="UpdateUserAddressInfo">-->
-        <!--update [user_address] set u_a_xh=#{uAXh},u_a_phone=#{uAPhone},u_a_people=#{uAPeople},u_a_address=#{uAAddress},u_a_default=#{uADefault} where u_a_guid=#{uAGuid}-->
-    <!--</update>-->
+
 
     <!--&lt;!&ndash;根据uAGuid删除用户信息地址&ndash;&gt;-->
     <!--<delete id="DeleteUserAddressInfo" >-->
       <!--delete from [user_address] where u_a_guid=#{uAGuid}-->
     <!--</delete>-->
+
+
+
+
+    <!--******************************以下RabbitMQ死信接受队列进行查询*******************************-->
+
+    <!--RabbitMQ死信接受队列-查找订单支付状态-->
+    <select id="GetOrderInPayStatusForOrderSid" resultType="com.nanbo.ordersystem.entity.EateryOrderSystem.Order">
+        select * from [Order] where order_sid=#{orderSid}
+    </select>
+
+    <!--RabbitMQ死信接受队列-修改订单成（未支付无效状态/取消订单）-->
+    <update id="UpdateOrderInvalid">
+    update [Order] set order_status=-1 where order_guid=#{orderGuid}
+    </update>
 
 </mapper>

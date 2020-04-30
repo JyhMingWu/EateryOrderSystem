@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nanbo.ordersystem.mapper.TestMapper">
+
+
+    <!--添加地址信息-->
+    <insert id="AddTest" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.Test">
+      insert into [test] (name,password) values (#{name},#{password})
+    </insert>
+
+    <!--添加附件信息-->
+    <insert id="AddTest2" parameterType="com.nanbo.ordersystem.entity.EateryOrderSystem.Test2">
+      insert into [test2] (name,password) values (#{name},#{password})
+    </insert>
+
+</mapper>

@@ -7,12 +7,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.nanbo.ordersystem.entity.EateryOrderSystem.*;
 import com.nanbo.ordersystem.entity.Result.Data;
 import com.nanbo.ordersystem.entity.Result.Results;
+import com.nanbo.ordersystem.server.OrderRabbitmqService;
 import com.nanbo.ordersystem.server.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +33,8 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderRabbitmqService orderRabbitmqService;
 
 
     @ApiOperation(value="获取所有订单(根据支付状态)",position =2,notes = "获取所有订单(根据支付状态)--后台专用")
@@ -70,8 +75,8 @@ public class OrderController {
 
 
 
-
-    @ApiOperation(value="删除订单/用户取消订单",position =8,notes = "删除订单/用户取消订单")
+    @Transactional(rollbackFor=Exception.class)//数据库事务注解(回滚必加)
+    @ApiOperation(value="删除订单",position =8,notes = "删除订单")
     @ApiImplicitParams({
             @ApiImplicitParam(name="orderGuid",value="订单Guid",dataType="String", paramType = "query",required = true),
             @ApiImplicitParam(name="orderSid",value="订单编号",dataType="String", paramType = "query",required = true)
@@ -103,6 +108,7 @@ public class OrderController {
                 results.setMessage("订单明细编号与订单编号不一致，不可操作！");
             }
         }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//手动回滚
             results.setStatus(false);
             results.setMessage("删除订单/用户取消订单DeleteOrder异常:"+e);
         }
@@ -148,7 +154,7 @@ public class OrderController {
         long  timeNew =  System.currentTimeMillis();
         //此处生成订单编号--开始
         Date d = new Date();
-        int randomNum = (int)((Math.random()*9+1)*100000); // 随机数 6 位
+        int randomNum = (int)((Math.random()*9+1)*100000); // 随机数 6 位（用于加在以下订单编号序列号之后）
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmssSSSSS");
         String DateNow = sdf.format(d);
         String OrderSid=DateNow+randomNum;
@@ -203,7 +209,6 @@ public class OrderController {
 
         results.setStatus(true);
         results.setData(order);
-
 //        try {
 //
 //            System.out.println("长度为："+list.size());
@@ -219,14 +224,13 @@ public class OrderController {
     }
 
 
-
+    @Transactional(rollbackFor=Exception.class)//数据库事务注解(回滚必加)
     @ApiOperation(value="提交订单",position =8,notes = "用户下单",tags = "订单业务--小程序调用")
     @ApiImplicitParam(name="order",value="订单对象",dataType="Order", paramType = "query",required = true)
     @RequestMapping(value = "/SubmissionOfOrders",method = RequestMethod.POST)
     public Results SubmissionOfOrders(String order){
         Results results=new Results();
         Order orders=JSON.parseObject(order,Order.class);
-        System.out.println("输出："+orders);
         try {
             //收件人、收件地址、联系电话不能为空
             if(orders.getOrderPeople().equals("")||orders.getOrderAddress().equals("")||orders.getOrderPhone().equals("")){
@@ -257,6 +261,9 @@ public class OrderController {
                     //明细添加成功
                     int order_result=orderService.AddOrder(orders);
                     if(order_result==1){
+                        //发送至RabbitMQ--延时队列15分钟后进行订单检测
+                        orderRabbitmqService.SendToDelayQueue(orders);
+
                         results.setStatus(true);
                         results.setMessage("提交订单成功!");
                     }else{
@@ -269,11 +276,41 @@ public class OrderController {
                 }
             }
         }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//手动回滚
             results.setStatus(false);
             results.setMessage("提交订单异常："+e);
         }
         return results;
     }
+
+
+    @Transactional(rollbackFor=Exception.class)//数据库事务注解(回滚必加)
+    @ApiOperation(value="用户取消订单",position =8,notes = "用户取消订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="orderGuid",value="订单Guid",dataType="String", paramType = "query",required = true)
+    })
+    @RequestMapping(value = "/CancelOrder",method = RequestMethod.POST)
+    public Results CancelOrder(String orderGuid,String orderSid){
+        Results results=new Results();
+        try {
+            //设置订单状态为-1操作
+            int status=orderService.UpdateOrderInvalid(orderGuid);
+            if(status==1){
+                //订单取消成功
+                results.setStatus(true);
+                results.setMessage("订单取消成功");
+            }else{
+                results.setStatus(false);
+                results.setMessage("订单取消未成功！");
+            }
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//手动回滚
+            results.setStatus(false);
+            results.setMessage("订单取消CancelOrder异常:"+e);
+        }
+        return results;
+    }
+
 
 
 }

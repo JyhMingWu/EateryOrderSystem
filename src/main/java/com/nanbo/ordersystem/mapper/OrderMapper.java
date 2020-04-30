@@ -31,7 +31,7 @@ public interface OrderMapper {
 
 
 
-
+    //******************************以下小程序调用*******************************
 
     //根据学号获取用户是否有默认地址信息
     UserAddress GetUserDefaultAddressInfo(String uAXh);
@@ -43,6 +43,10 @@ public interface OrderMapper {
     int AddOrder(Order order);
 
 
+    //******************************以下RabbitMQ死信接受队列进行查询*******************************
+    //RabbitMQ死信接受队列-查找订单支付状态
+    List<Order> GetOrderInPayStatusForOrderSid(String orderSid);
 
-
+    //RabbitMQ死信接受队列-修改订单成（未支付无效状态/取消订单）
+    int UpdateOrderInvalid(String orderGuid);
 }

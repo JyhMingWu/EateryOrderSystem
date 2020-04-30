@@ -185,7 +185,7 @@
 
     $(function(){
         $.ajax({
-            url: "http://localhost:9417/Order/GetOrderInfo?orderGuid="+getUrlParam("orderGuid"),
+            url: "/Order/GetOrderInfo?orderGuid="+getUrlParam("orderGuid"),
             type: 'GET',
             // beforeSend: function(request) {
             //     request.setRequestHeader("Access-Token", localStorage.getItem("user_token"));
@@ -303,7 +303,7 @@
         formData.append("food_status", $("input[type='checkbox']").is(':checked'));
 
         $.ajax({
-            url: "http://localhost:9417/OrderManagementSystem/UpdateFoodData",
+            url: "/OrderManagementSystem/UpdateFoodData",
             type: 'POST',
             data:formData,
             cache: false,

@@ -79,7 +79,7 @@
 function tijiao() {
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:9417/UserAddress/UpdateUserAddressInfo',
+        url: '/UserAddress/UpdateUserAddressInfo',
         dataType: 'json',
         data:{
             uAGuid:$("#uAGuid").val(),
@@ -105,7 +105,7 @@ function tijiao() {
 function test() {
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:9417/Order/ShoppingCartSettlement',
+        url: '/Order/ShoppingCartSettlement',
         dataType: 'json',
         // contentType:'application/json;charset=UTF-8',
         // data:{
@@ -131,7 +131,7 @@ function test() {
                 alert("我现在进行下一步插入了");
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:9417/Order/SubmissionOfOrders',
+                    url: '/Order/SubmissionOfOrders',
                     dataType: 'json',
                     data:{
                         order:JSON.stringify(data['Data'])
@@ -151,6 +151,7 @@ function test() {
         }
     });
 }
+
 </script>
 </body>
 </html>
